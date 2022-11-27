@@ -5,7 +5,7 @@
 
 using namespace std;
 using T = long double;
-static const T EPS = 1e-6;
+const T EPS = 1e-6;
 
 const T INF = numeric_limits<T>::infinity();
 

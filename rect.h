@@ -5,7 +5,7 @@
 #include "point.h"
 
 struct Rect {
-    const Point a, b;
+    Point a, b;
 
     Rect(const Point &a, const Point &b) : a(a), b(b) {}
 
@@ -16,6 +16,10 @@ struct Rect {
     friend ostream &operator<<(ostream &os, const Rect &rect) {
         os << rect.a << ' ' << rect.b;
         return os;
+    }
+
+    bool isNonInf() const {
+        return a.isNonInf() && b.isNonInf();
     }
 };
 

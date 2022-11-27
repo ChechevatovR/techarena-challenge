@@ -71,34 +71,47 @@ void solveRoma(ifstream &in, ostream &out) {
     ld c1, c2;
     in >> n >> c1 >> c2;
     Polygon p(in, n);
-    vector<Polygon> cutPrev;
-    vector<Polygon> cutCur;
 
-    cutPrev.PB(p);
+    Rect BB = p.BB();
+    T startX = BB.a.x;
+    T endX = BB.b.x;
+    T lenX = BB.b.x - BB.a.x;
 
-    for (int _ = 0; _ < CUT_ITERS; _++) {
-        cerr << "CUT ITER " << _ << '\n';
-        for (const Polygon &p : cutPrev) {
-            if (p.n <= 4) {
-                cutCur.PB(p);
-                continue;
-            }
-//            auto x = getCutX(p);
-            const vector<Polygon> toInsert = p.cut();
-            cutCur.insert(cutCur.end(), toInsert.begin(), toInsert.end());
-        }
-        swap(cutCur, cutPrev);
-        if (cutPrev.size() > 3000) {
-            swap(cutCur, cutPrev);
-            break;
+    cerr << BB <<'\n';
+
+    int CUTS = 10;
+    for (int i = 1; i < CUTS; i++) {
+        T cutPoint = startX + (lenX / CUTS) * i;
+        p.addCutPoints(cutPoint);
+        cerr << cutPoint << '\n';
+        cerr << p.points.size() << '\n';
+    }
+
+    vector<Rect> ans;
+    for (int i = 0; i < CUTS; i++) {
+        T left = startX + (lenX / CUTS) * i;
+        T right = startX + (lenX / CUTS) * (i + 1);
+        assert(left < right);
+        assert(startX <= left);
+        assert(right <= endX);
+        Rect BB = p.BB(left, right);
+        const T EPS_OUT = 1e-6;
+        BB.a.x -= EPS_OUT;
+        BB.b.x += EPS_OUT;
+//        assert(BB.a.x <= left + EPS);
+//        assert(BB.b.x >= right - EPS);
+        if (BB.isNonInf()) {
+            ans.PB(BB);
+        } else {
+            assert(false);
         }
     }
 
-    assert(cutPrev.size() <= 3000);
+    assert(ans.size() <= 3000);
     out << setprecision(10) << fixed;
-    out << cutPrev.size() << '\n';
-    for (const Polygon &p : cutPrev) {
-        out << p.BB() << '\n';
+    out << ans.size() << '\n';
+    for (const Rect &r : ans) {
+        out << r << '\n';
     }
 }
 
@@ -116,6 +129,6 @@ int main(int argc, char *argv[]) {
         cerr << "Expected input filename as argument" << '\n';
         return -1;
     }
-    solvePetya(fin, fout);
+    solveRoma(fin, fout);
     return 0;
 }

@@ -24,6 +24,10 @@ struct Point {
         return os;
     }
 
+    bool isNonInf() const {
+        return !isinf(x) && !isinf(y);
+    }
+
     T x, y;
 };
 

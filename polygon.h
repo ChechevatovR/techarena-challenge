@@ -14,7 +14,6 @@ int random(int max) {
 struct Polygon {
     int n;
     vector<Point> points;
-    static const int EPS = 1e-6;
 
     Polygon() : n{0}, points() {}
 
@@ -129,15 +128,12 @@ struct Polygon {
         for (int i = 0; i < points.size(); i++) {
             Point a = points[i];
             Point b = points[(i + 1) % n];
-//            if (floatEq(a.x, x)) {
-//                inter_x.push_back(i);
-//                continue;
-//            }
             if ((a.x < x && b.x > x) || (a.x > x && b.x < x)) {
                 Point inter = intersectLines(a, b, Point(x, 0), Point(x, 100));
-                points.insert(points.begin() + i + 1, inter);
+                points.push_back(inter);
             }
         }
+        n = points.size();
     }
 
     Rect BB() const {
@@ -156,16 +152,19 @@ struct Polygon {
     }
 
     Rect BB(T left, T right) const {
+        assert(left < right);
         T xMin = INF;
         T yMin = INF;
         T xMax = -INF;
         T yMax = -INF;
 
         for (const Point &p: points) {
-            xMin = min(xMin, p.x);
-            yMin = min(yMin, p.y);
-            xMax = max(xMax, p.x);
-            yMax = max(yMax, p.y);
+            if (left - EPS <= p.x && p.x <= right + EPS) {
+                xMin = min(xMin, p.x);
+                yMin = min(yMin, p.y);
+                xMax = max(xMax, p.x);
+                yMax = max(yMax, p.y);
+            }
         }
         return Rect(Point(xMin, yMin), Point(xMax, yMax));
     }
