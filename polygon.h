@@ -17,20 +17,27 @@ struct Polygon {
         }
     }
 
-    vector<Polygon> cutX(T x) {
-        vector<Polygon> ans;
-        Polygon first;
-        Polygon cur;
-        for(Point& cur : points) {
-            if(cur.x)
+    vector<Polygon> cutX(T x) const {
+    }
+
+    vector<Polygon> cutY(T y) const;
+
+    Rect BB() const {
+        T xMin = INF;
+        T yMin = INF;
+        T xMax = -INF;
+        T yMax = -INF;
+
+        for (const Point &p : points) {
+            xMin = min(xMin, p.x);
+            yMin = min(yMin, p.y);
+            xMax = max(xMax, p.x);
+            yMax = max(yMax, p.y);
         }
+        return Rect(Point(xMin, yMin), Point(xMax, yMax));
     }
 
-    vector<Polygon> cutY(T y);
-
-    vector<Rect> cover() {
-
-    }
+    vector<Rect> cover() const;
 };
 
 #endif //TECHARENA_CHALLENGE_PILYGON_H

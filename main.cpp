@@ -11,6 +11,8 @@ typedef long long ll;
 typedef unsigned int uint;
 typedef long double ld;
 
+static const int CUT_ITERS = 0; // O(2^CUT_ITERS)
+
 #define PB push_back
 #define EB emplace_back
 #define F first
@@ -18,31 +20,64 @@ typedef long double ld;
 #define MT make_tuple
 #define MP make_pair
 
-
-
-vector<Polygon>
-
-ld get_ans(vector<Point> ) {
+ld get_ans(vector<Point> p) {
 
 }
 
-void solve() {
+T getCutX(const Polygon &p) {
+    const Rect BB = p.BB();
+    return (BB.b.x + BB.a.x) / 2;
+}
+
+T getCutY(const Polygon &p) {
+    const Rect BB = p.BB();
+    return (BB.b.y + BB.a.y) / 2;
+}
+
+void solve(ifstream &in, ostream &out) {
     int n;
     ld c1, c2;
-    cin >> n >> c1 >> c2;;
+    in >> n >> c1 >> c2;
+    Polygon p(in, n);
+    vector<Polygon> cutPrev;
+    vector<Polygon> cutCur;
 
-    vector<rect> ans = get_covering(polygon);
-    cout << get_ans(ans) << '\n';
-    for(rect& x : ans) {
-        cout << x.a.x << ' ' << x.a.y << ' ' << x.b.x << ' ' << x.b.y << '\n';
+    cutPrev.PB(p);
+
+    for (int _ = 0; _ < CUT_ITERS; _++) {
+        for (const Polygon &p : cutPrev) {
+            auto x = getCutX(p);
+            const vector<Polygon> toInsert = p.cutX(x);
+            cutCur.insert(cutCur.end(), toInsert.begin(), toInsert.end());
+        }
+        swap(cutCur, cutPrev);
+        if (cutPrev.size() > 3000) {
+            swap(cutCur, cutPrev);
+            break;
+        }
     }
 
+    /*
+    // Do not store output - just print it
+    vector<Rect> ans;
+    for (const Polygon &p : cutPrev) {
+        ans.PB(p.BB());
+    }
+     */
+
+    assert(cutPrev.size() <= 3000);
+    out << setprecision(10) << fixed;
+    out << cutPrev.size() << '\n';
+    for (const Polygon &p : cutPrev) {
+        out << p.BB() << '\n';
+    }
 }
 
 int main(int argc, char *argv[]) {
     cerr << argc << '\n';
     ifstream fin;
     ofstream fout;
+//    fout << setprecision(10) << fixed;
     if (argc == 2) {
         cerr << std::filesystem::current_path() << '\n';
         string filename = argv[1];
@@ -52,8 +87,6 @@ int main(int argc, char *argv[]) {
         cerr << "Expected input filename as argument" << '\n';
         return -1;
     }
-    int n;
-    fin >> n;
-    fout << n;
+    solve(fin, fout);
     return 0;
 }
