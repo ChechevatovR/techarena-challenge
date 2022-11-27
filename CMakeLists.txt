@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20)
 project(techarena_challenge)
 
-set(CMAKE_CXX_STANDARD 20)
+#find_package(GTest REQUIRED)
 
-add_executable(techarena_challenge main.cpp)
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(solution main.cpp)
