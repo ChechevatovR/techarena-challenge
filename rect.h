@@ -3,10 +3,14 @@
 
 #include "point.h"
 
-struct rect {
-    Point a, b;
+struct Rect {
+    const Point a, b;
 
-    rect(const Point &a, const Point &b) : a(a), b(b) {}
+    Rect(const Point &a, const Point &b) : a(a), b(b) {}
+
+    T area() const {
+        return abs(a.x - b.x) * abs(a.y - b.y);
+    }
 };
 
 #endif //TECHARENA_CHALLENGE_RECT_H

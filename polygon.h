@@ -1,6 +1,8 @@
 #ifndef TECHARENA_CHALLENGE_PILYGON_H
 #define TECHARENA_CHALLENGE_PILYGON_H
 
+#include "rect.h"
+
 struct Polygon {
     int n;
     vector<Point> points;
@@ -11,6 +13,13 @@ struct Polygon {
             in >> x >> y;
             points.emplace_back(Point(x, y));
         }
+    }
+
+    vector<Polygon> cutX(T x);
+    vector<Polygon> cutY(T y);
+
+    vector<Rect> cover() {
+
     }
 };
 
