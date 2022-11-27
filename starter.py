@@ -9,7 +9,7 @@ CWD = '/home/roman/runner-cwd/'
 
 
 def read_inputs() -> Iterable[str]:
-    return map(str, range(20, 0, -1))
+    return range(7)
 
 
 def write_subprocess_input(filename: str, input: str) -> None:
@@ -17,8 +17,8 @@ def write_subprocess_input(filename: str, input: str) -> None:
         print(input, file=file)
 
 
-def run_subprocess(id: int) -> None:
-    proc = subprocess.Popen([EXECUTOR, str(id)], cwd=CWD, stderr=subprocess.PIPE)
+def run_subprocess(arg: str) -> None:
+    proc = subprocess.Popen([EXECUTOR, arg], cwd=CWD, stderr=subprocess.PIPE)
     proc.wait()
     return
 
@@ -30,10 +30,11 @@ def read_subprocess_output(filename: str) -> str:
 
 def run_task(id: int, task_input: str) -> str:
     print(f"Thread: {id} start")
-    if UPDATE_INPUTS:
-        write_subprocess_input(f'{id}.in', task_input)
-    run_subprocess(id)
-    task_output = read_subprocess_output(f'{id}.out')
+    filename = str(id).zfill(2)
+    # if UPDATE_INPUTS:
+    #     write_subprocess_input(f'{filename}.in', task_input)
+    run_subprocess(filename)
+    task_output = read_subprocess_output(f'{filename}.out')
     print(f"Thread: {id} done")
     return task_output
 
@@ -41,7 +42,7 @@ def run_task(id: int, task_input: str) -> str:
 def main():
     inputs = list(read_inputs())
     with ThreadPoolExecutor(max_workers=8) as pool:
-        futures = pool.map(run_task, range(len(inputs)), inputs)
+        futures = pool.map(run_task, range(1, len(inputs) + 1), inputs)
         for future in futures:
             print(future)
 

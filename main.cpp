@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     if (argc == 2) {
         cerr << std::filesystem::current_path() << '\n';
         string filename = argv[1];
-        fin = ifstream(filename + ".in");
+        fin = ifstream(filename + ".txt");
         fout = ofstream(filename + ".out");
     } else {
         cerr << "Expected input filename as argument" << '\n';
