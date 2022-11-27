@@ -5,4 +5,4 @@ project(techarena_challenge)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(solution main.cpp)
+add_executable(solution main.cpp point.cpp)

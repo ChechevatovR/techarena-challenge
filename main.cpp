@@ -1,5 +1,7 @@
 #include "bits/stdc++.h"
 
+#include "point.h"
+
 using namespace std;
 
 typedef unsigned long long ull;
@@ -29,8 +31,7 @@ int main(int argc, char *argv[]) {
     }
     int n;
     fin >> n;
-    cerr << n << '\n';
-    this_thread::sleep_for(std::chrono::seconds(n));
+
     fout << n;
     return 0;
 }
