@@ -27,6 +27,10 @@ static bool betw(double l, double r, double x) {
     return min(l, r) <= x + EPS && x <= max(l, r) + EPS;
 }
 
+long double det1(double a, double b, double c, double d) {
+    return a * d - b * c;
+}
+
 static bool intersect_1d(double a, double b, double c, double d) {
     if (a > b) swap(a, b);
     if (c > d) swap(c, d);

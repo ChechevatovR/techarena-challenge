@@ -40,7 +40,7 @@ ld get_ans(vector<Polygon> &x) {
     return ans;
 }
 
-void solve(ifstream &in, ostream &out) {
+void solvePetya(ifstream &in, ostream &out) {
     int n;
     ld c1, c2;
     in >> n >> c1 >> c2;
@@ -65,8 +65,8 @@ void solve(ifstream &in, ostream &out) {
         out << p.BB() << '\n';
     }
 }
-/*
-void solve(ifstream &in, ostream &out) {
+
+void solveRoma(ifstream &in, ostream &out) {
     int n;
     ld c1, c2;
     in >> n >> c1 >> c2;
@@ -101,7 +101,7 @@ void solve(ifstream &in, ostream &out) {
         out << p.BB() << '\n';
     }
 }
-*/
+
 
 int main(int argc, char *argv[]) {
     cerr << argc << '\n';
@@ -116,6 +116,6 @@ int main(int argc, char *argv[]) {
         cerr << "Expected input filename as argument" << '\n';
         return -1;
     }
-    solve(fin, fout);
+    solvePetya(fin, fout);
     return 0;
 }
