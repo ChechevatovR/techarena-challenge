@@ -1,6 +1,8 @@
 #include "bits/stdc++.h"
 
 #include "point.h"
+#include "polygon.h"
+#include "rect.h"
 
 using namespace std;
 
@@ -31,7 +33,6 @@ int main(int argc, char *argv[]) {
     }
     int n;
     fin >> n;
-
     fout << n;
     return 0;
 }
