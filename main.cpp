@@ -20,9 +20,6 @@ static const int CUT_ITERS = 0; // O(2^CUT_ITERS)
 #define MT make_tuple
 #define MP make_pair
 
-ld get_ans(vector<Point> p) {
-
-}
 
 T getCutX(const Polygon &p) {
     const Rect BB = p.BB();
@@ -77,7 +74,6 @@ int main(int argc, char *argv[]) {
     cerr << argc << '\n';
     ifstream fin;
     ofstream fout;
-//    fout << setprecision(10) << fixed;
     if (argc == 2) {
         cerr << std::filesystem::current_path() << '\n';
         string filename = argv[1];
