@@ -19,65 +19,47 @@ struct Polygon {
         }
     }
 
-    static long double det (double a, double b, double c, double d) {
+    static long double det(double a, double b, double c, double d) {
         return a * d - b * c;
     }
 
-    static Point intersect(Point a1, Point a2, Point b1, Point b2) {
-        Point res;
-        line m(a1, a2), n(b1, b2);
-        long double zn = det(m.a, m.b, n.a, n.b);
-        res.x = -det(m.c, m.b, n.c, n.b) / zn;
-        res.y = -det(m.a, m.c, n.a, n.c) / zn;
-        return res;
+    inline bool betw(double l, double r, double x) {
+        return min(l, r) <= x + EPS && x <= max(l, r) + EPS;
     }
 
-    vector<Polygon> cutX(T x) const {
-        vector<Polygon> ans;
-        Point first;
-        Polygon cur;
-        int start = 0;
-        for (int i = 0; i++; i < n) {
-            Point a = points[i];
-            Point b = points[(i + 1) % n];
-            if (a.x == b.x && a.x == x) continue;
-            if (a.x <= x && b.x >= x) {
-                start = (i + 1) % n;
-                first = intersect(a, b, Point(x, 0), Point(x, 100));
-                break;
-            }
-        }
-        int cur_pologenie = 1;
-        cur.points.push_back(first);
-        for(int i = 0; i < n; i++) {
-            int id = (i + start) % n;
-            if(cur_pologenie == 0) {
-                if(points[id].x <= x) {
-                    cur.points.push_back(points[id]);
-                } else {
-                    Point inter = intersect(cur.points.back(), points[id], Point(x, 0), Point(x, 100));
-                    cur.points.push_back(inter);
-                    ans.push_back(cur);
-                    cur.points.clear();
-                    cur.points.push_back(inter);
-                    cur_pologenie = 1;
-                }
-            } else {
-                if(points[id].x >= x) {
-                    cur.points.push_back(points[id]);
-                } else {
-                    Point inter = intersect(cur.points.back(), points[id], Point(x, 0), Point(x, 100));
-                    cur.points.push_back(inter);
-                    ans.push_back(cur);
-                    cur.points.clear();
-                    cur.points.push_back(inter);
-                    cur_pologenie = 0;
-                }
-            }
+    inline bool intersect_1d(double a, double b, double c, double d) {
+        if (a > b) swap(a, b);
+        if (c > d) swap(c, d);
+        return max(a, c) <= min(b, d) + EPS;
+    }
+
+    bool isIntersect(Point a, Point b, Point c, Point d) {
+        Point left;
+        Point right;
+        if (!intersect_1d(a.x, b.x, c.x, d.x) || !intersect_1d(a.y, b.y, c.y, d.y))
+            return false;
+        line m(a, b);
+        line n(c, d);
+        double zn = det(m.a, m.b, n.a, n.b);
+        if (abs(zn) < EPS) {
+            if (abs(m.dist(c)) > EPS || abs(n.dist(a)) > EPS)
+                return false;
+            if (b < a) swap(a, b);
+            if (d < c) swap(c, d);
+            left = max(a, c);
+            right = min(b, d);
+            return true;
+        } else {
+            left.x = right.x = -det(m.c, m.b, n.c, n.b) / zn;
+            left.y = right.y = -det(m.a, m.c, n.a, n.c) / zn;
+            return betw(a.x, b.x, left.x)
+                   && betw(a.y, b.y, left.y)
+                   && betw(c.x, d.x, left.x)
+                   && betw(c.y, d.y, left.y);
         }
     }
 
-    vector<Polygon> cutY(T y) const;
+
 
     Rect BB() const {
         T xMin = INF;
@@ -85,7 +67,7 @@ struct Polygon {
         T xMax = -INF;
         T yMax = -INF;
 
-        for (const Point &p : points) {
+        for (const Point &p: points) {
             xMin = min(xMin, p.x);
             yMin = min(yMin, p.y);
             xMax = max(xMax, p.x);
