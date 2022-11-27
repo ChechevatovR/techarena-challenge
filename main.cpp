@@ -18,6 +18,27 @@ typedef long double ld;
 #define MT make_tuple
 #define MP make_pair
 
+
+
+vector<Polygon>
+
+ld get_ans(vector<Point> ) {
+
+}
+
+void solve() {
+    int n;
+    ld c1, c2;
+    cin >> n >> c1 >> c2;;
+
+    vector<rect> ans = get_covering(polygon);
+    cout << get_ans(ans) << '\n';
+    for(rect& x : ans) {
+        cout << x.a.x << ' ' << x.a.y << ' ' << x.b.x << ' ' << x.b.y << '\n';
+    }
+
+}
+
 int main(int argc, char *argv[]) {
     cerr << argc << '\n';
     ifstream fin;

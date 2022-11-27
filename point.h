@@ -4,12 +4,11 @@
 #include "bits/stdc++.h"
 
 using namespace std;
-using T = double;
+using T = long double;
 
 struct Point {
-    T x, y;
-
-    Point(T x, T y);
+    Point() : x(), y() {}
+    Point(T x, T y) : x(x), y(y) {}
 
     T scalar(const Point &o) const {
         return x * o.x + y * o.y;
@@ -18,6 +17,8 @@ struct Point {
     T pseudoVector(const Point &o) const {
         return x * o.y + y * o.x;
     }
+
+    T x, y;
 };
 
 #endif

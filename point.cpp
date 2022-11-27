@@ -16,4 +16,4 @@ typedef long double ld;
 #define MT make_tuple
 #define MP make_pair
 
-Point::Point(T x, T y) : x(x), y(y) {}
+

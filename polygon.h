@@ -7,6 +7,8 @@ struct Polygon {
     int n;
     vector<Point> points;
 
+    Polygon(): n{0}, points() {}
+
     Polygon(istream &in, int n): n(n) {
         for (int _ = 0; _ < n; ++_) {
             T x, y;
@@ -15,7 +17,15 @@ struct Polygon {
         }
     }
 
-    vector<Polygon> cutX(T x);
+    vector<Polygon> cutX(T x) {
+        vector<Polygon> ans;
+        Polygon first;
+        Polygon cur;
+        for(Point& cur : points) {
+            if(cur.x)
+        }
+    }
+
     vector<Polygon> cutY(T y);
 
     vector<Rect> cover() {
