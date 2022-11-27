@@ -11,7 +11,7 @@ typedef long long ll;
 typedef unsigned int uint;
 typedef long double ld;
 
-static const int CUT_ITERS = 0; // O(2^CUT_ITERS)
+static const int CUT_ITERS = 2; // O(2^CUT_ITERS)
 
 #define PB push_back
 #define EB emplace_back
@@ -43,8 +43,8 @@ void solve(ifstream &in, ostream &out) {
 
     for (int _ = 0; _ < CUT_ITERS; _++) {
         for (const Polygon &p : cutPrev) {
-            auto x = getCutX(p);
-            const vector<Polygon> toInsert = p.cutX(x);
+//            auto x = getCutX(p);
+            const vector<Polygon> toInsert = p.cut();
             cutCur.insert(cutCur.end(), toInsert.begin(), toInsert.end());
         }
         swap(cutCur, cutPrev);

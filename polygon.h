@@ -4,6 +4,10 @@
 #include "rect.h"
 #include "line.h"
 
+int random(int max) {
+    return rand() % max;
+}
+
 struct Polygon {
     int n;
     vector<Point> points;
@@ -23,17 +27,17 @@ struct Polygon {
         return a * d - b * c;
     }
 
-    inline bool betw(double l, double r, double x) {
+    static bool betw(double l, double r, double x) {
         return min(l, r) <= x + EPS && x <= max(l, r) + EPS;
     }
 
-    inline bool intersect_1d(double a, double b, double c, double d) {
+    static bool intersect_1d(double a, double b, double c, double d) {
         if (a > b) swap(a, b);
         if (c > d) swap(c, d);
         return max(a, c) <= min(b, d) + EPS;
     }
 
-    bool isIntersect(Point a, Point b, Point c, Point d) {
+    static bool isIntersect(Point a, Point b, Point c, Point d) {
         Point left;
         Point right;
         if (!intersect_1d(a.x, b.x, c.x, d.x) || !intersect_1d(a.y, b.y, c.y, d.y))
@@ -60,6 +64,52 @@ struct Polygon {
     }
 
 
+    vector<Polygon> cut() const {
+        int indA;
+        int indB;
+
+        while (true) {
+            indA = random(n);
+            indB = random(n);
+            if (indA == 0 && indB == n - 1) continue;
+            if (abs(indA - indB) <= 1) continue;
+
+            Point A = points[indA];
+            Point B = points[indB];
+
+            bool goodEdge = true;
+            for (int i = 0; i < n; i++) {
+                Point X = points[i];
+                Point Y = points[(i + 1) % n];
+                if (isIntersect(A, B, X, Y)) {
+                    goodEdge = false;
+                    break;
+                }
+            }
+            if (goodEdge) break;
+        }
+        Polygon a, b;
+
+        for (int i = indA; i != indB; i = (i + 1) % n) {
+            a.points.push_back(points[i]);
+        }
+        a.points.push_back(points[indB]);
+
+        for (int i = indB; i != indA; i = (i + 1) % n) {
+            b.points.push_back(points[i]);
+        }
+        b.points.push_back(points[indA]);
+
+        a.n = a.points.size();
+        b.n = b.points.size();
+
+        vector<Polygon> res;
+        res.push_back(a);
+        res.push_back(b);
+        return res;
+    }
+
+    vector<Polygon> cutY(T y) const;
 
     Rect BB() const {
         T xMin = INF;
