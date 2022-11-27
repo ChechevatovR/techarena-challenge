@@ -44,6 +44,7 @@ def main():
     with ThreadPoolExecutor(max_workers=8) as pool:
         futures = pool.map(run_task, range(1, len(inputs) + 1), inputs)
         for future in futures:
+            # pass
             print(future)
 
 

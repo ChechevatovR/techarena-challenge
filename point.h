@@ -1,14 +1,7 @@
 #ifndef TECHARENA_CHALLENGE_POINT_H
 #define TECHARENA_CHALLENGE_POINT_H
 
-#include <ostream>
-#include "bits/stdc++.h"
-
-using namespace std;
-using T = long double;
-static const int EPS = 1e-6;
-
-const T INF = numeric_limits<T>::infinity();
+#include "util.h"
 
 struct Point {
     Point() : x(), y() {}

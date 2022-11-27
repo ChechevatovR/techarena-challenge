@@ -4,6 +4,9 @@
 #include "rect.h"
 #include "line.h"
 
+#define F first
+#define S second
+
 int random(int max) {
     return rand() % max;
 }
@@ -21,20 +24,6 @@ struct Polygon {
             in >> x >> y;
             points.emplace_back(Point(x, y));
         }
-    }
-
-    static long double det(double a, double b, double c, double d) {
-        return a * d - b * c;
-    }
-
-    static bool betw(double l, double r, double x) {
-        return min(l, r) <= x + EPS && x <= max(l, r) + EPS;
-    }
-
-    static bool intersect_1d(double a, double b, double c, double d) {
-        if (a > b) swap(a, b);
-        if (c > d) swap(c, d);
-        return max(a, c) <= min(b, d) + EPS;
     }
 
     static bool isIntersect(Point a, Point b, Point c, Point d) {
@@ -63,53 +52,69 @@ struct Polygon {
         }
     }
 
+    pair<Polygon, Polygon> cutByEdge(int indA, int indB) const {
+//        cerr << "Cutting" << '\n';
+        pair<Polygon, Polygon> res;
 
-    vector<Polygon> cut() const {
+        for (int i = indA; i != indB; i = (i + 1) % n) {
+            res.F.points.push_back(points[i]);
+        }
+        res.F.points.push_back(points[indB]);
+        res.F.n = res.F.points.size();
+
+        for (int i = indB; i != indA; i = (i + 1) % n) {
+            res.S.points.push_back(points[i]);
+        }
+        res.S.points.push_back(points[indA]);
+        res.S.n = res.S.points.size();
+
+        return res;
+    }
+
+    pair<int, int> findCutEdgeRandom() const {
+//        cerr << "finding good edge" << '\n';
         int indA;
         int indB;
 
         while (true) {
             indA = random(n);
             indB = random(n);
-            if (indA == 0 && indB == n - 1) continue;
-            if (abs(indA - indB) <= 1) continue;
+            if (isNeighbourIndexes(indA, indB, n)) continue;
 
             Point A = points[indA];
             Point B = points[indB];
 
             bool goodEdge = true;
             for (int i = 0; i < n; i++) {
+                int j = (i + 1) % n;
                 Point X = points[i];
-                Point Y = points[(i + 1) % n];
+                Point Y = points[j];
+                if (i == indA || j == indA || i == indB || j == indB) continue;
                 if (isIntersect(A, B, X, Y)) {
+//                    cerr << "Edge " << A << ' ' << B << "   is bad because intersects with   " << X << ' ' << Y << '\n';
                     goodEdge = false;
                     break;
                 }
             }
-            if (goodEdge) break;
+            if (goodEdge) {
+                return {indA, indB};
+            }
         }
-        Polygon a, b;
-
-        for (int i = indA; i != indB; i = (i + 1) % n) {
-            a.points.push_back(points[i]);
-        }
-        a.points.push_back(points[indB]);
-
-        for (int i = indB; i != indA; i = (i + 1) % n) {
-            b.points.push_back(points[i]);
-        }
-        b.points.push_back(points[indA]);
-
-        a.n = a.points.size();
-        b.n = b.points.size();
-
-        vector<Polygon> res;
-        res.push_back(a);
-        res.push_back(b);
-        return res;
     }
 
-    vector<Polygon> cutY(T y) const;
+    pair<int, int> findBestEdge() {
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (isNeighbourIndexes(i, j, n)) continue;
+            }
+        }
+    }
+
+    vector<Polygon> cut() const {
+        auto [indA, indB] = findCutEdgeRandom();
+        auto res = cutByEdge(indA, indB);
+        return vector<Polygon>({res.F, res.S});
+    }
 
     Rect BB() const {
         T xMin = INF;
