@@ -19,11 +19,11 @@ struct Polygon {
         }
     }
 
-    long double det (double a, double b, double c, double d) {
+    static long double det (double a, double b, double c, double d) {
         return a * d - b * c;
     }
 
-    Point intersect(Point a1, Point a2, Point b1, Point b2) {
+    static Point intersect(Point a1, Point a2, Point b1, Point b2) {
         Point res;
         line m(a1, a2), n(b1, b2);
         long double zn = det(m.a, m.b, n.a, n.b);
@@ -32,8 +32,8 @@ struct Polygon {
         return res;
     }
 
-    pair<vector<Polygon>, vector<Polygon>> cutX(T x) {
-        vector<Polygon> ansl, ansr;
+    vector<Polygon> cutX(T x) const {
+        vector<Polygon> ans;
         Point first;
         Polygon cur;
         int start = 0;
@@ -57,7 +57,7 @@ struct Polygon {
                 } else {
                     Point inter = intersect(cur.points.back(), points[id], Point(x, 0), Point(x, 100));
                     cur.points.push_back(inter);
-                    ansl.push_back(cur);
+                    ans.push_back(cur);
                     cur.points.clear();
                     cur.points.push_back(inter);
                     cur_pologenie = 1;
@@ -68,7 +68,7 @@ struct Polygon {
                 } else {
                     Point inter = intersect(cur.points.back(), points[id], Point(x, 0), Point(x, 100));
                     cur.points.push_back(inter);
-                    ansr.push_back(cur);
+                    ans.push_back(cur);
                     cur.points.clear();
                     cur.points.push_back(inter);
                     cur_pologenie = 0;
@@ -77,7 +77,7 @@ struct Polygon {
         }
     }
 
-    vector<Polygon> cutY(T y);
+    vector<Polygon> cutY(T y) const;
 
     Rect BB() const {
         T xMin = INF;
